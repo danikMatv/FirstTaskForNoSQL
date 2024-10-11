@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: TaskOneForNoSQL
+  data:
+    mongodb:
+      uri: mongodb+srv://Admin:123@mongodb.aipln.mongodb.net/?retryWrites=true&w=majority&appName=MongoDB
+      database: MongoDB
