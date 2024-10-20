@@ -5,3 +5,8 @@ spring:
     mongodb:
       uri: mongodb+srv://Admin:123@mongodb.aipln.mongodb.net/?retryWrites=true&w=majority&appName=MongoDB
       database: MongoDB
+  neo4j:
+    uri: neo4j+s://6e6d4008.databases.neo4j.io
+    authentication:
+      password: b622YuZtt9l65yEr2UAtXa1vwLkAadyxOa2BX_bbp5M
+      username: neo4j

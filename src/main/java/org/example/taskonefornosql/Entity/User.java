@@ -1,10 +1,13 @@
 package org.example.taskonefornosql.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -19,7 +22,7 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private List<String> interests;
-    private List<String> friends;
+    private List<String> interests = new ArrayList<>();
+    private List<String> friends = new ArrayList<>();
 
 }

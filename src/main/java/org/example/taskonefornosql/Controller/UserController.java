@@ -2,17 +2,10 @@ package org.example.taskonefornosql.Controller;
 
 import org.example.taskonefornosql.Entity.User;
 import org.example.taskonefornosql.Service.UserService;
+import org.example.taskonefornosql.Service.GraphService.UserGraphService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,19 +14,34 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserGraphService userGraphService;
+
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
-        return userService.register(user);
+        User newUser = userService.register(user);
+        userGraphService.createUserInGraph(newUser); // add user to graph
+        return newUser;
     }
 
     @PutMapping("/{userId}/add-friend/{friendId}")
     public User addFriend(@PathVariable String userId, @PathVariable String friendId) {
-        return userService.addFriend(userId, friendId);
+        User updatedUser = userService.addFriend(userId, friendId);
+        userGraphService.createFriendshipInGraph(userId, friendId); // add thread to graph
+        return updatedUser;
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
     public ResponseEntity<Object> removeFriend(@PathVariable String userId, @PathVariable String friendId) {
         userService.removeFriend(userId, friendId);
+        userGraphService.removeFriendshipInGraph(userId, friendId); // delete thread from graph
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Object> removeUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+        userGraphService.deleteUserInGraph(userId); // delete user from graph
         return ResponseEntity.ok().build();
     }
 
@@ -42,4 +50,3 @@ public class UserController {
         return userService.findByEmail(email);
     }
 }
-
