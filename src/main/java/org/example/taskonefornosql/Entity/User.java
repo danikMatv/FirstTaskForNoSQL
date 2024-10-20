@@ -22,7 +22,7 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private List<String> interests = new ArrayList<>();
+    private List<String> subscriptions = new ArrayList<>();
     private List<String> friends = new ArrayList<>();
 
 }

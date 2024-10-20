@@ -30,7 +30,27 @@ public class UserGraphService {
         neo4jUserRepository.deleteById(userId);
     }
 
+    public void subscribe(String subscriberId, String subscribedUserId) {
+        UserNode subscriber = neo4jUserRepository.findByUserId(subscriberId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + subscriberId));
+        UserNode subscribedUser = neo4jUserRepository.findByUserId(subscribedUserId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + subscribedUserId));
 
+        if (!subscriber.getSubscriptions().contains(subscribedUser)) {
+            subscriber.getSubscriptions().add(subscribedUser);
+            neo4jUserRepository.save(subscriber);
+        }
+    }
+
+    public void unsubscribe(String subscriberId, String subscribedUserId) {
+        UserNode subscriber = neo4jUserRepository.findByUserId(subscriberId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + subscriberId));
+        UserNode subscribedUser = neo4jUserRepository.findByUserId(subscribedUserId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + subscribedUserId));
+
+        subscriber.getSubscriptions().remove(subscribedUser);
+        neo4jUserRepository.save(subscriber);
+    }
 
     public void createFriendshipInGraph(String userId1, String userId2) {
         UserNode user1 = neo4jUserRepository.findByUserId(userId1)
